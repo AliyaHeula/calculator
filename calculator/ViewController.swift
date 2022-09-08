@@ -10,12 +10,12 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet var holder: UIView!
     @IBOutlet weak var result: UILabel!
-    var firstNumber = 0
-    var secondNumber = 0
-    var calcOperator = 0
-    var lastOperator = 0
-    var newEntry = true
-    var stopCount = true
+    var firstNumber = 0 // number in buffer
+    var secondNumber = 0 // number from the screen
+    var calcOperator = 0 // 0: default, 11: /, 12: *, 13: -, 14: +
+    var lastOperator = 0 // to monitor if previous operator was "="
+    var newEntry = true // to monitor if operator or digit can be applied
+//    var stopCount = true
     
     
     @IBAction func digits(_ sender: UIButton) {
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         } else {
             secondNumber = Int(result.text!)!
         }
-        stopCount = false
+//        stopCount = false
     }
 
     @IBAction func acButton(_ sender: Any) {
@@ -43,15 +43,9 @@ class ViewController: UIViewController {
         secondNumber = 0
         calcOperator = 0
         newEntry = true
-        stopCount = true
+//        stopCount = true
         print("AC: clear")
     }
-    
-//    func ifOverflow(_ check: Int?) -> Int? {
-//        if check == nil {
-//            return nil
-//        }
-//    }
     
     func printOperator(_ tag: Int) {
         switch tag {
@@ -70,55 +64,61 @@ class ViewController: UIViewController {
         }
     }
     
+    func calculate(_ calcOperator: Int ,_ first: Int, _ second: Int) -> Int? {
+        var result = (0, false)
+        switch calcOperator {
+        case 11:
+            result = firstNumber.dividedReportingOverflow(by: secondNumber)
+        case 12:
+            result = firstNumber.multipliedReportingOverflow(by: secondNumber)
+        case 13:
+            result = firstNumber.remainderReportingOverflow(dividingBy: secondNumber)
+        case 14:
+            result = firstNumber.addingReportingOverflow(secondNumber)
+        default:
+            break
+        }
+        if result.1 == true {
+            return nil
+        }
+        return result.0
+    }
+    
     @IBAction func operation(_ sender: Any) {
         let newOperator = Int((sender as AnyObject).tag)
         if calcOperator == 0 {
             firstNumber = secondNumber
-        } else if stopCount == false {
-            if calcOperator == 11 {
-                firstNumber = firstNumber / secondNumber
-                result.text = String(firstNumber)
-            }
-            else if calcOperator == 12 {
-                firstNumber = firstNumber * secondNumber
-                result.text = String(firstNumber)
-            }
-            else if calcOperator == 13 {
-                firstNumber = firstNumber - secondNumber
-                result.text = String(firstNumber)
-            }
-            else if calcOperator == 14 {
-                firstNumber = firstNumber + secondNumber
+//        } else if stopCount == false {
+        } else if newEntry == false {
+            let tmp = calculate(calcOperator, firstNumber, secondNumber)
+            if tmp == nil {
+                result.text = "overflow"
+            } else {
+                firstNumber = tmp!
                 result.text = String(firstNumber)
             }
         }
-        print ("\n a=\(firstNumber), b=\(secondNumber) result: \(result.text!)")
+        print ("\nresult: \(result.text!)")
         printOperator(newOperator)
         secondNumber = firstNumber
         calcOperator = newOperator
         lastOperator = newOperator
         newEntry = true
-        stopCount = true
+//        stopCount = true
     }
     
     @IBAction func eqBatton(_ sender: Any) {
-        switch calcOperator {
-        case 11:
-            firstNumber = firstNumber / secondNumber
-        case 12:
-            firstNumber = firstNumber * secondNumber
-        case 13:
-            firstNumber = firstNumber - secondNumber
-        case 14:
-            firstNumber = firstNumber + secondNumber
-        default:
-            break
+        let tmp = calculate(calcOperator, firstNumber, secondNumber)
+        if tmp == nil {
+            result.text = "overflow"
+        } else {
+            firstNumber = tmp!
+            result.text = String(firstNumber)
         }
         lastOperator = 15
-        result.text = String(firstNumber)
         newEntry = true
-        print ("\na=\(firstNumber), b=\(secondNumber) = \(result.text!)")
-        stopCount = true
+        print ("\n= \(result.text!)")
+//        stopCount = true
     }
     
     @IBAction func negative(_ sender: Any) {
@@ -132,7 +132,5 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-    
 
 }
-
