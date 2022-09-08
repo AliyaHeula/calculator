@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet var holder: UIView!
+//    @IBOutlet var holder: UIView!
     @IBOutlet weak var result: UILabel!
     var firstNumber = 0 // number in buffer
     var secondNumber = 0 // number from the screen
