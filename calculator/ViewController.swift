@@ -72,7 +72,7 @@ class ViewController: UIViewController {
         case 12:
             result = firstNumber.multipliedReportingOverflow(by: secondNumber)
         case 13:
-            result = firstNumber.remainderReportingOverflow(dividingBy: secondNumber)
+            result = firstNumber.subtractingReportingOverflow(secondNumber)
         case 14:
             result = firstNumber.addingReportingOverflow(secondNumber)
         default:
@@ -110,7 +110,11 @@ class ViewController: UIViewController {
     @IBAction func eqBatton(_ sender: Any) {
         let tmp = calculate(calcOperator, firstNumber, secondNumber)
         if tmp == nil {
-            result.text = "overflow"
+            if calcOperator == 11 && secondNumber == 0 {
+                result.text = "error"
+            } else {
+                result.text = "overflow"
+            }
         } else {
             firstNumber = tmp!
             result.text = String(firstNumber)
