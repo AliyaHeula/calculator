@@ -15,7 +15,6 @@ class ViewController: UIViewController {
     var calcOperator = 0 // 0: default, 11: /, 12: *, 13: -, 14: +
     var lastOperator = 0 // to monitor if previous operator was "="
     var newEntry = true // to monitor if operator or digit can be applied
-//    var stopCount = true
     
     
     @IBAction func digits(_ sender: UIButton) {
@@ -34,7 +33,6 @@ class ViewController: UIViewController {
         } else {
             secondNumber = Int(result.text!)!
         }
-//        stopCount = false
     }
 
     @IBAction func acButton(_ sender: Any) {
@@ -44,7 +42,6 @@ class ViewController: UIViewController {
         calcOperator = 0
         lastOperator = 0
         newEntry = true
-//        stopCount = true
         print("AC: clear")
     }
     
