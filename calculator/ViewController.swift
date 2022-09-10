@@ -86,7 +86,6 @@ class ViewController: UIViewController {
         let newOperator = Int((sender as AnyObject).tag)
         if calcOperator == 0 {
             firstNumber = secondNumber
-//        } else if stopCount == false {
         } else if newEntry == false {
             let tmp = calculate(calcOperator, firstNumber, secondNumber)
             if tmp == nil {
@@ -102,7 +101,6 @@ class ViewController: UIViewController {
         calcOperator = newOperator
         lastOperator = newOperator
         newEntry = true
-//        stopCount = true
     }
     
     @IBAction func eqBatton(_ sender: Any) {
@@ -120,7 +118,6 @@ class ViewController: UIViewController {
         lastOperator = 15
         newEntry = true
         print ("\n= \(result.text!)")
-//        stopCount = true
     }
     
     @IBAction func negative(_ sender: Any) {
