@@ -42,6 +42,7 @@ class ViewController: UIViewController {
         firstNumber = 0
         secondNumber = 0
         calcOperator = 0
+        lastOperator = 0
         newEntry = true
 //        stopCount = true
         print("AC: clear")
@@ -126,9 +127,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func negative(_ sender: Any) {
-        if secondNumber != 0 {
-            secondNumber *= (-1)
-            result.text = String(secondNumber)
+        if calcOperator == 0 && lastOperator == 0 {
+            firstNumber = secondNumber
+        }
+        if firstNumber != 0 {
+            firstNumber *= (-1)
+            result.text = String(firstNumber)
+            secondNumber = firstNumber
             print("+/-: change sign of digit")
         }
     }
